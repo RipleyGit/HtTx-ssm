@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       
+       <!-- 开启包扫描 -->
+       <context:component-scan base-package="me.seaOf.httx.service"/>
+       
+       <!-- 加载本地数据库配置文件 -->
+       <context:property-placeholder location="classpath:jdbc.properties"/>
+       
+       <!-- 配置数据源 -->
+       <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+       		<property name="driverClassName" value="${jdbc.driver}"/>
+       		<property name="jdbcUrl" value="${jdbc.url}"></property>
+       		<property name="username" value="${jdbc.user}"></property>
+       		<property name="password" value="${jdbc.password}"></property>
+       </bean>
+       <!-- 定义事务管理器 -->
+       <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+       		<property name="dataSource" ref="dataSource"></property>
+       </bean>
+       <!-- 配置事务管理器 -->
+       <tx:advice id="txAdvice">
+       		<tx:attributes>
+       			<tx:method name="insert*" propagation="REQUIRED"/>
+       			<tx:method name="delete*" propagation="REQUIRED"/>
+       			<tx:method name="update*" propagation="REQUIRED"/>
+       			<tx:method name="select*" propagation="SUPPORTS"/>
+       			<tx:method name="*" read-only="true"/>
+       		</tx:attributes>
+       </tx:advice>
+       <!-- 声明事务处理 -->
+       <aop:config>
+       		<aop:pointcut expression="execution(* me.seaOf.httx.service..*.*(..))" id="pc"/>
+       		<aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+       </aop:config>
+       
+       <!-- spring 整合 mybatis -->
+       <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+       		<!-- 加载数据源 -->
+			<property name="dataSource" ref="dataSource"/>
+       		<!-- 加载mybatis配置文件 -->
+       		<property name="configLocation" value="classpath:mybatis.xml"/>
+       		<!-- 添加对象映射文件 -->
+       		<property name="mapperLocations" value="classpath:/me/seaOf/httx/mapper/*.xml"/>
+       </bean>
+       <!-- 为Mapper接口创建代理对象 -->
+       <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       		<!-- 为mapper包下的所有接口创建代理对象 -->
+			<property name="basePackage" value="me.seaOf.httx.mapper"/>       
+       </bean>
+       
+</beans>
