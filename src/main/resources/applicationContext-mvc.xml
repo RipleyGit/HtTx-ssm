@@ -15,8 +15,10 @@
        
        <!-- 配置试图解释器 -->
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-       		<property name="prefix" value="/WEB-INF/"/>
+       		<property name="prefix" value="/WEB-INF/pages/"/>
        		<property name="suffix" value=".jsp"/>
        </bean>
        
+       <!-- 处理静态资源被“/”所拦截的问题 -->
+		<mvc:default-servlet-handler />
 </beans>
