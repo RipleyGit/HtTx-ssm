@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.seaOf.httx.mapper.DeptMapper">
+	<!--查询部门的全部列表信息     要求全部的sql语句统统小写-->
+	<select id="findAll" resultMap="deptRM">
+		select * from 
+		dept_p d
+		       left join
+		(select dept_id as p_id,dept_name as p_name from dept_p) p
+		       on d.parent_id = p.p_id
+		order by dept_id
+	</select>
+	
+	<!--type:封装的主对象的类型   由于定义了别名包 所以直接写类名，映射时会自动的拼接
+		 autoMapping="true" 在多表关联查询中使用，可以实现自动的映射。可以将属性和字段相同的实现
+		 映射，也可以根据驼峰映射规则中规定自动映射。
+	  -->
+	<resultMap type="Dept" id="deptRM" autoMapping="true">
+		<id column="dept_id" property="deptId"/>
+		
+		<!--一对一映射  -->
+		<association property="parentDept" javaType="Dept">
+			<id column="parent_id" property="deptId"/>
+			<result column="p_name" property="deptName"/>
+		</association>
+	</resultMap>
+	
+	<!--修改部门状态 
+		collection：表示当前正在遍历的集合 
+		遍历数组      array
+		遍历list集合     list
+		如果遍历map中的内容    map中的key
+		
+		<foreach collection=""></foreach>
+		 item="id"  表示当前正在遍历的数据  取值时采用#{id}
+		 open="(" close=")"   开始和结束
+		 separator=","  每次遍历的分割符 
+	 -->
+	<update id="updateState">
+		update dept_p set state = #{state} where dept_id in 
+		<foreach collection="deptIds"  item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+		
+	</update>
+	
+	<!--批量删除操作  -->
+	<delete id="deleteDepts">
+		delete from dept_p where dept_id in (
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	<!--部门新增  -->
+	<insert id="saveDept">
+		insert into dept_p
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dept_id != null">
+				dept_id
+			</if>
+			<if test="dept_name != null">
+				dept_name
+			</if>
+			<if test="parent_id != null">
+				parent_id
+			</if>
+			<if test="state != null">
+				state
+			</if>
+			<if test="create_time != null">
+				create_time
+			</if>
+			<if test="update_time != null">
+				update_time
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deptId != null">
+				#{deptId}
+			</if>
+			<if test="deptName != null">
+				#{deptName}
+			</if>
+			<if test="parentDept.deptId != null">
+				#{parentDept.deptId}
+			</if>
+			<if test="state != null">
+				#{state}
+			</if>
+			<if test="createTime != null">
+				#{createTime}
+			</if>
+			<if test="updateTime != null">
+				#{updateTime}
+			</if>
+		</trim>
+	</insert>
+	
+	
+	<!--查询部门信息  -->
+	<select id="findDeptById" resultMap="deptRM">
+		select * from 
+		dept_p d
+		       left join
+		(select dept_id as p_id,dept_name as p_name from dept_p) p
+		       on d.parent_id = p.p_id
+		where dept_id = #{deptId}
+	</select>
+	
+	
+	<!--查询排除自己之外的数据  -->
+	<select id="findParentDept" resultType="Dept">
+		select * from dept_p  where dept_id  not in (#{deptId})
+	</select>
+	
+
+	<update id="updateDept">
+		update dept_p
+		<set>
+			<if test="deptName != null">
+				dept_name = #{deptName},
+			</if>
+			<if test="parentDept.deptId">
+				parent_id = #{parentDept.deptId},
+			</if>
+			<if test="state">
+				state = #{state},
+			</if>
+			<if test="updateTime">
+				update_time = #{updateTime}
+			</if>
+		</set>
+		where dept_id = #{deptId}
+	</update>
+	
+</mapper>
