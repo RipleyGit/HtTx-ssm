@@ -1,32 +1,54 @@
-<web-app>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="jt-manage" version="2.5">
   <display-name>Archetype Created Web Application</display-name>
-  
-  <servlet>
-  		<servlet-name>spring-mvc</servlet-name>
-  		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-  		<init-param>
-  			<param-name>contextConfigLocation</param-name>
-  			<param-value>classpath:applicationContext*.xml</param-value>
-  		</init-param>
-  </servlet>
-  <servlet-mapping>
-  		<servlet-name>spring-mvc</servlet-name>
-  		<url-pattern>/</url-pattern>
-  <!-- 
-  	*.do 只会拦截以。do结尾的请求
-  	/ 	 作用：只会拦截请求，拦截静态资源文件，js,图片，css 不会拦截动态资源 .jsp
-  	resFul传值：localhost：8090/addUser/1/tom/18/男
-  	url传值：localhost:8090?id=1&name=tom&age=18&sex=男
-   -->
-  </servlet-mapping>
-  
-  <filter>
-  	<filter-name>characterEncoding</filter-name>
-  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-  </filter>
-  <filter-mapping>
-  	<filter-name>characterEncoding</filter-name>
-  	<url-pattern>/</url-pattern>
-  </filter-mapping>
+    
+  <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	
+	<!--Spring的ApplicationContext 载入 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 编码过滤器，以UTF8编码 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置SpringMVC -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 指定SpringMVC配置文件 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:applicationContext-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
     
 </web-app>

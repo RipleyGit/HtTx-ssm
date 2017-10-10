@@ -80,12 +80,17 @@
 		</dependency>
 		
 		<!-- Oracle版权问题，maven目录必须自己手动建立 -->
-		<dependency> 
+		<!-- <dependency>
+		  <groupId>com.oracle</groupId>
+		  <artifactId>ojdbc14</artifactId>
+		  <version>10.2.0.4.0</version>
+		</dependency>
+ -->
+ 		<dependency> 
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.1.0.7.0</version>
 		</dependency>
-
 		<!-- MySql -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -171,11 +176,20 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<port>8080</port>
+					<port>8090</port>
+					<!-- 可认为指定虚拟路径 -->
 					<path>/</path>
 					<uriEncoding>UTF-8</uriEncoding>  
 				</configuration>
 			</plugin>
 		</plugins>
+	<!-- <resources>
+        <resource>
+            <directory>src/main</directory>
+            <includes>
+                <include>**/*.xml</include>
+            </includes>
+        </resource>
+    </resources> -->
 	</build>
 </project>
