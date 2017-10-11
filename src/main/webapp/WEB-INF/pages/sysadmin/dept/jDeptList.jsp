@@ -4,6 +4,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>部门列表</title>
+	<script>
+		function getChecked(){
+			var checkBox = document.getElementsByName("deptId");
+			var checked = new Array();
+			for(var i = 0;i<checkBox.length;i++){
+				if(checkBox[i].checked){
+					checked.push(checkBox[i]);
+				}
+			}
+			return checked;
+		}
+		
+		function toView(){
+			var checked = getChecked();
+			if(checked.length == 1){
+				formSubmit('toview','_self');
+			}else{
+				alert("请选择一个部门进行查看！");
+				return fasle;
+			}
+		}
+		function toUpdate(){
+			var checked = getChecked();
+			if(checked.length == 1){
+				formSubmit('toupdate','_self');
+			}else{
+				alert("请选中一个部门！");
+				return fasle;
+			}
+		}
+		function toDelete(){
+			var checked = getChecked();
+			if(checked.length > 0){
+				formSubmit('delete','_self');
+			}else{
+				alert("请勾选删除的部门");
+				return false;
+			}
+		}
+		function toStart(){
+			var checked = getChecked();
+			if(checked.length > 0){
+				formSubmit('start','_self');
+			}else{
+				alert("请选至少一个启用的部门！");
+				return false;
+			}
+			
+		}
+		function toStop(){
+			var checked = getChecked();
+			if(checked.length > 0){
+				formSubmit('stop','_self');
+			}else{
+				alert("请选至少一个停用的部门！");
+				return false;
+			}
+			
+		}
+		
+	</script>
 </head>
 
 <body>
@@ -14,12 +75,12 @@
 <div id="innerMenubar">
   <div id="navMenubar">
 <ul>
-	<li id="view"><a href="#" onclick="formSubmit('toview','_self');this.blur();">查看</a></li>
+	<li id="view"><a href="#" onclick="toView();this.blur();">查看</a></li>
 	<li id="new"><a href="#" onclick="formSubmit('tocreate','_self');this.blur();">新增</a></li>
-	<li id="update"><a href="#" onclick="formSubmit('toupdate','_self');this.blur();">修改</a></li>
-	<li id="delete"><a href="#" onclick="formSubmit('delete','_self');this.blur();">删除</a></li>
-	<li id="new"><a href="#" onclick="formSubmit('start','_self');this.blur();">启用</a></li>
-	<li id="new"><a href="#" onclick="formSubmit('stop','_self');this.blur();">停用</a></li>
+	<li id="update"><a href="#" onclick="toUpdate();this.blur();">修改</a></li>
+	<li id="delete"><a href="#" onclick="toDelete();this.blur();">删除</a></li>
+	<li id="new"><a href="#" onclick="toStart();this.blur();">启用</a></li>
+	<li id="new"><a href="#" onclick="toStop();this.blur();">停用</a></li>
 </ul>
   </div>
 </div>
