@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.seaOf.httx.mapper.UserMapper">
+	<resultMap type="User" id="userRM" autoMapping="true">
+		<id column="user_id" property="userId"/>
+		<association property="dept" javaType="Dept">
+			<id column="dept_id" property="deptId"/>
+			<result column="d_name" property="deptName"/>
+		</association>	
+		<association property="userInfo" javaType="UserInfo" resultMap="userInfoRM"/>
+	</resultMap>
+	<!-- 表示封装userInfo对象 -->
+	<resultMap type="UserInfo" id="userInfoRM">
+		<id column="user_info_id" property="userInfoId"/>
+		
+		<association property="manager" javaType="UserInfo" >
+			<id column="manager_id" property="userInfoId"/>
+			<result column="m_name" property="name"/>
+		</association>
+	</resultMap>
+	
+	<select id="findUserInfoById" resultMap="userInfoRM">
+		select * from user_info_p where user_info_id=#{userId}
+	</select>
+	
+	<select id="findAll" resultMap="userRM">
+		select * from 
+	(select * from 
+	  user_p u
+	     left join 
+	(select u.user_info_id,u.name,u.card_no,u.manager_id,p.m_name,u.join_date,
+	u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.remark,
+	u.order_no from 
+	user_info_p u 
+	            left join
+	(select user_info_id m_id, name m_name from  user_info_p) p
+	            on u.manager_id = p.m_id) info
+	      on u.user_id = info.user_info_id)u
+	      left join 
+	 (select dept_id d_id, dept_name d_name from dept_p)d
+	        on u.dept_id = d.d_id
+	</select>
+	<select id="findUserById" resultType="User">
+		select * from user_p where user_id = #{userId}
+	</select>
+	<!--新增用户信息  -->
+	<insert id="saveUser">
+		insert into user_p  
+		values(
+		#{userId},
+		#{dept.deptId},
+		#{username},
+		#{password},
+		#{state},
+		#{createBy,jdbcType=VARCHAR},
+		#{createDept,jdbcType=VARCHAR},
+		#{createTime,jdbcType=DATE},
+		#{updateBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE}
+		)
+	</insert>
+	
+	
+</mapper>
