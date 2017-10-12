@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.seaOf.httx.mapper.UserInfoMapper">
-	<select id="findUserInfoList" resultType="UserInfo">
+	<delete id="deleteUserInfos">
+		delete from user_info_p where user_info_id in (
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+	
+	
+	<select id="findManagerList" resultType="UserInfo">
 		select * from user_info_p
 	</select>
+	
 	
 	<insert id="saveUserInfo">
 		insert into user_info_p values(
@@ -19,13 +29,37 @@
 			#{telephone},
 			#{userLevel},
 			#{remark},
-			#{orderNo,jdbcType=NUMERIC},
+			#{orderNo},
 			#{createBy,jdbcType=VARCHAR},
 			#{createDept,jdbcType=VARCHAR},
 			#{createTime,jdbcType=DATE},
 			#{updateBy,jdbcType=VARCHAR},
 			#{updateTime,jdbcType=DATE}
 		)
+	
 	</insert>
 	
+	<update id="updateUser">
+		update user_info_p 
+		<set>
+			name = #{name},
+			card_no = #{cardNo},
+			manager_id = #{manager.userInfoId},
+			join_date = #{joinDate},
+			salary = #{salary},
+			birthday = #{birthday},
+			gender = #{gender},
+			station = #{station},
+			telephone = #{telephone},
+			user_level = #{userLevel},
+			remark = #{remark},
+			order_no = #{orderNo},
+			create_by = #{createBy,jdbcType=VARCHAR},
+			create_dept = #{createDept,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=DATE},
+			update_by = #{updateBy,jdbcType=VARCHAR},
+			update_time = #{updateTime,jdbcType=DATE}
+		</set>
+		where user_info_id = #{userInfoId}
+	</update>
 </mapper>

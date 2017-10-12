@@ -66,5 +66,38 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.findUserInfoById(userId);
 	}
+	@Override
+	public void updateUser(User user) {
+		
+		UserInfo userInfo = user.getUserInfo();
+		
+		//添加修改日期
+		user.setUpdateTime(new Date());
+		
+		//info对象添加修改日期
+		userInfo.setUpdateTime(user.getUpdateTime());
+		//为UserInfoId赋值
+		userInfo.setUserInfoId(user.getUserId());
+		
+		userMapper.updateUser(user);
+		userInfoMapper.updateUser(userInfo);
+		
+	}
+	@Override
+	public void deleteUsers(String[] userIds) {
+		//先删除从表数据,再删主表,这样能够在有主外键约束的表中进行正确删除
+		userInfoMapper.deleteUserInfos(userIds);
+		
+		//删除主表数据
+		userMapper.deleteUsers(userIds);
+	}
 
+
+	@Override
+	public void updateState(String[] userIds, int state) {
+		
+		userMapper.updateState(userIds,state);
+		
+	}
+	
 }

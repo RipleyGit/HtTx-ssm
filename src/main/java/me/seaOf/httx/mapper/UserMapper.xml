@@ -10,7 +10,7 @@
 		<association property="userInfo" javaType="UserInfo" resultMap="userInfoRM"/>
 	</resultMap>
 	<!-- 表示封装userInfo对象 -->
-	<resultMap type="UserInfo" id="userInfoRM">
+	<resultMap type="UserInfo" id="userInfoRM" autoMapping="true">
 		<id column="user_info_id" property="userInfoId"/>
 		
 		<association property="manager" javaType="UserInfo" >
@@ -24,25 +24,23 @@
 	</select>
 	
 	<select id="findAll" resultMap="userRM">
-		select * from 
-	(select * from 
-	  user_p u
-	     left join 
-	(select u.user_info_id,u.name,u.card_no,u.manager_id,p.m_name,u.join_date,
-	u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.remark,
-	u.order_no from 
-	user_info_p u 
-	            left join
-	(select user_info_id m_id, name m_name from  user_info_p) p
-	            on u.manager_id = p.m_id) info
-	      on u.user_id = info.user_info_id)u
-	      left join 
-	 (select dept_id d_id, dept_name d_name from dept_p)d
-	        on u.dept_id = d.d_id
+		select * from
+		(select * from
+		user_p u
+		left join
+		(select u.user_info_id,u.name,u.card_no,u.manager_id,p.m_name,u.join_date,
+		u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.remark,
+		u.order_no from
+		user_info_p u
+		left join
+		(select user_info_id m_id, name m_name from user_info_p) p
+		on u.manager_id = p.m_id) info
+		on u.user_id = info.user_info_id)u
+		left join
+		(select dept_id d_id, dept_name d_name from dept_p)d
+		on u.dept_id = d.d_id
 	</select>
-	<select id="findUserById" resultType="User">
-		select * from user_p where user_id = #{userId}
-	</select>
+	
 	<!--新增用户信息  -->
 	<insert id="saveUser">
 		insert into user_p  
@@ -59,6 +57,65 @@
 		#{updateTime,jdbcType=DATE}
 		)
 	</insert>
+	<!--删除用户信息  -->
+	<delete id="deleteUsers">
+		delete from user_p where user_id in
+			<foreach collection="array" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+	</delete>
 	
+	
+	<update id="updateState">
+		update user_p set state = #{param2} where user_id in (
+			<foreach collection="param1" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</update>
+	
+	<!--mybatis中很多时候有些sql是重复的,这些sql只需要写一遍,之后随处调用  -->
+	<sql id="userSql">
+		select * from 
+		(select * from
+		user_p u
+		       left join
+		(select u.user_info_id,u.name,u.card_no,u.manager_id,m.m_name,u.join_date,
+		u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.order_no,
+		u.remark from 
+		user_info_p u
+		            left join
+		(select user_info_id m_id,name m_name from user_info_p) m
+		            on u.manager_id = m.m_id)info
+		       on u.user_id = info.user_info_id)u 
+		       left join
+		 (select dept_id d_id,dept_name from dept_p)d 
+		       on u.dept_id = d.d_id
+	</sql>
+	
+	<!--根据userId查询用户信息  -->
+	<select id="findUserById" resultMap="userRM">
+		<!--sql复用  -->
+		<include refid="userSql"/>
+		where user_id = #{userId}
+	</select>
+	
+	<!--修改user表数据  -->
+	<update id="updateUser">
+		update user_p 
+		<set>
+			dept_id = #{dept.deptId},
+			username = #{username},
+			password = #{password},
+			state = #{state},
+			<if test="createBy !=null">create_by = #{createBy,jdbcType=VARCHAR},</if>  
+			create_dept = #{createDept,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=DATE},
+			update_by = #{updateBy,jdbcType=VARCHAR},
+			update_time = #{updateTime,jdbcType=DATE}
+		</set>
+		where user_id = #{userId}
+
+	</update>
 	
 </mapper>

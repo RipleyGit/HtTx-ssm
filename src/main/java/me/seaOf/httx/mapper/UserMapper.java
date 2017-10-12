@@ -13,4 +13,10 @@ public interface UserMapper {
 	public User findUserById(String userId);
 
 	public UserInfo findUserInfoById(String userId);
+
+	public void updateUser(User user);
+
+	public void deleteUsers(String[] userIds);
+
+	public void updateState(String[] userIds, int state);
 }

@@ -47,7 +47,7 @@
 			<select name="dept.deptId" style="width:121px">
 				<option value="">---请选择---</option>
 				<c:forEach items="${deptList}" var="d">
-					<option value="${d.deptId}" <c:if test="${ d.deptId == user.dept.deptId }">selected="selected"</c:if> >${d.deptName}</option>
+					<option value="${d.deptId}" <c:if test="${user.dept.deptId==d.deptId}">selected="selected"</c:if>  >${d.deptName}</option>
 				</c:forEach>
 			</select>
 		</td>
@@ -62,32 +62,38 @@
 			<select name="userInfo.manager.userInfoId" style="width:121px">
 				<option value="">---请选择/无上级---</option>
 				<c:forEach items="${managerList}" var="m">
-					<option value="${m.userInfoId}" <c:if test="m.userInfoId == userInfo.manager.userInfoId"></c:if> >${m.name}</option>
+					<!--当前遍历的userId应该不等于用户的userId  -->
+					<c:if test="${m.userInfoId !=user.userId}">
+						<!--mListId==user上级领导的Id 应该实现回显  -->
+						<option value="${m.userInfoId}" 
+							<c:if test="${m.userInfoId ==user.userInfo.manager.userInfoId}">selected="selected"</c:if>>${m.name}
+						</option>
+					</c:if>
 				</c:forEach>
 			</select>
 		</td>
 	</tr>
 	<tr class="odd">
 		<td>入职时间：</td>
-		<td><input name="userInfo.joinDate" type="text" onclick="WdatePicker({el:this,isShowOthers:true,dateFmt:'yyyy-MM-dd'});" ${ userInfo.joinDate }/></td>
+		<td><input name="userInfo.joinDate" type="text" onclick="WdatePicker({el:this,isShowOthers:true,dateFmt:'yyyy-MM-dd'});" value="<fmt:formatDate value="${user.userInfo.joinDate}" pattern="yyyy-MM-dd"/>"/></td>
 		<td>薪水：</td>
-		<td><input type="text" name="userInfo.salary"/></td>
+		<td><input type="text" name="userInfo.salary" value="${ user.userInfo.salary }"/></td>
 	</tr>
 	<tr class="odd">
 		<td>生日：</td>
-		<td><input name="userInfo.birthday" type="text" onclick="WdatePicker({el:this,isShowOthers:true,dateFmt:'yyyy-MM-dd'});" ${ userInfo.birthday }/></td>
+		<td><input name="userInfo.birthday" type="text" onclick="WdatePicker({el:this,isShowOthers:true,dateFmt:'yyyy-MM-dd'});" value="<fmt:formatDate value="${user.userInfo.birthday}" pattern="yyyy-MM-dd"/>"/></td>
 		<td>性别：</td>
 		<td>
-			<input type="radio" name="userInfo.gender" value="男" <c:if test="${ userInfo.gender == '男' }">checked="checked"</c:if>/>男
-			<input type="radio" name="userInfo.gender" value="女" <c:if test="${ userInfo.gender == '女' }">checked="checked"</c:if>/>女
+			<input type="radio" name="userInfo.gender" value="男" <c:if test="${ user.userInfo.gender == '男' }">checked="checked"</c:if>/>男
+			<input type="radio" name="userInfo.gender" value="女" <c:if test="${ user.userInfo.gender == '女' }">checked="checked"</c:if>/>女
 		</td>
 	</tr>
 		<tr class="odd">
 		<td>岗位：</td>
-		<td><input name="userInfo.station" type="text" value="${ userInfo.station }"/></td>
+		<td><input name="userInfo.station" type="text" value="${ user.userInfo.station }"/></td>
 		<td>电话：</td>
 		<td>
-			<input name="userInfo.telephone"  type="text" value="${ userInfo.telephone }"/>
+			<input name="userInfo.telephone"  type="text" value="${ user.userInfo.telephone }"/>
 		</td>
 	</tr>
 	</tr>
@@ -95,15 +101,15 @@
 		<td>等级：</td>
 		<td>
 			<select name="userInfo.userLevel" style="width:121px">
-				<option value="4" <c:if test="${ userInfo.userLevel ==4 }">selected="selected"</c:if>>普通用户</option>
-				<option value="3" <c:if test="${ userInfo.userLevel ==3 }">selected="selected"</c:if>>部门经理</option>
-				<option value="2" <c:if test="${ userInfo.userLevel ==2 }">selected="selected"</c:if>>副总</option>
-				<option value="1" <c:if test="${ userInfo.userLevel ==1 }">selected="selected"</c:if>>总经理</option>
+				<option value="4" <c:if test="${ user.userInfo.userLevel ==4 }">selected="selected"</c:if>>普通用户</option>
+				<option value="3" <c:if test="${ user.userInfo.userLevel ==3 }">selected="selected"</c:if>>部门经理</option>
+				<option value="2" <c:if test="${ user.userInfo.userLevel ==2 }">selected="selected"</c:if>>副总</option>
+				<option value="1" <c:if test="${ user.userInfo.userLevel ==1 }">selected="selected"</c:if>>总经理</option>
 			</select>
 		</td>
 		<td>排序号：</td>
 		<td>
-			<input name="userInfo.orderNo"  type="text" value="${ userInfo.orderNo }"/>
+			<input name="userInfo.orderNo"  type="text" value="${ user.userInfo.orderNo }"/>
 		</td>
 	</tr>
 	<tr class="odd">
@@ -116,7 +122,7 @@
 	<tr class="odd">
 		<td>备注信息：</td>
 		<td colspan="3">
-			<textarea style="width:100%;height:80px" name="userInfo.remark" value="${ userInfo.remark }"></textarea>
+			<textarea style="width:100%;height:80px" name="userInfo.remark" value="${ user.userInfo.remark }"></textarea>
 		</td>
 	</tr>
 </table>
