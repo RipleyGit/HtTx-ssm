@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findAll();
 	}
 	@Override
-	public List<UserInfo> findUserList() {
+	public List<UserInfo> findUserInfoList() {
 		// TODO Auto-generated method stub
 		return userInfoMapper.findUserInfoList();
 	}

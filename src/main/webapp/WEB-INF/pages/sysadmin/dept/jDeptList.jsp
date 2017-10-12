@@ -37,7 +37,11 @@
 		function toDelete(){
 			var checked = getChecked();
 			if(checked.length > 0){
+				if(confirm("你确定删除该用户？")){
 				formSubmit('delete','_self');
+				}else{
+					return false;
+				}
 			}else{
 				alert("请勾选删除的部门");
 				return false;

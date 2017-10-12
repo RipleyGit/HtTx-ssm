@@ -29,6 +29,13 @@ public class UserController extends BaseController {
 		model.addAttribute("userList", userList);
 		return "/sysadmin/user/jUserList";
 	}
+	
+	@RequestMapping("/toview")
+	public String toView(String userId,Model model){
+		User user = userService.findUserById(userId);
+		model.addAttribute("user", user);
+		return "/sysadmin/user/jUserView";
+	}
 	/**@RequestParam
 	 * value="userId" 页面提交的名称
 	 * defaultValue   如果页面没有传递参数,则使用默认值
@@ -74,7 +81,7 @@ public class UserController extends BaseController {
 		List<Dept> deptList = deptService.findAll();
 
 		// 准备上级领导列表 要求获取 userId和name属性
-		List<UserInfo> managerList = userService.findUserList();
+		List<UserInfo> managerList = userService.findUserInfoList();
 
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("managerList", managerList);
@@ -92,11 +99,11 @@ public class UserController extends BaseController {
 	@RequestMapping("/toupdate")
 	public String toUpdate(String userId, Model model) {
 		User user = userService.findUserById(userId);
-		UserInfo userInfo = userService.findUserInfoById(userId);
+//		UserInfo userInfo = userService.findUserInfoById(userId);
 		List<Dept> deptList = deptService.findAll();
-		List<UserInfo> managerList = userService.findUserList();
+		List<UserInfo> managerList = userService.findUserInfoList();
 		model.addAttribute("user", user);
-		model.addAttribute("userInfo", userInfo);
+//		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("deptList", deptList);
 		model.addAttribute("managerList", managerList);
 		return "/sysadmin/user/jUserUpdate";

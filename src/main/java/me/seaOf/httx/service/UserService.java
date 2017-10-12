@@ -8,7 +8,7 @@ import me.seaOf.httx.pojo.UserInfo;
 public interface UserService {
 	public List<User> findAll();
 
-	public List<UserInfo> findUserList();
+	public List<UserInfo> findUserInfoList();
 
 	public void saveUser(User user);
 

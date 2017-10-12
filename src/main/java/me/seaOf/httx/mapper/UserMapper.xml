@@ -76,21 +76,21 @@
 	
 	<!--mybatis中很多时候有些sql是重复的,这些sql只需要写一遍,之后随处调用  -->
 	<sql id="userSql">
-		select * from 
+		select * from
 		(select * from
 		user_p u
-		       left join
-		(select u.user_info_id,u.name,u.card_no,u.manager_id,m.m_name,u.join_date,
-		u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.order_no,
-		u.remark from 
+		left join
+		(select u.user_info_id,u.name,u.card_no,u.manager_id,p.m_name,u.join_date,
+		u.salary,u.birthday,u.gender,u.station,u.telephone,u.user_level,u.remark,
+		u.order_no from
 		user_info_p u
-		            left join
-		(select user_info_id m_id,name m_name from user_info_p) m
-		            on u.manager_id = m.m_id)info
-		       on u.user_id = info.user_info_id)u 
-		       left join
-		 (select dept_id d_id,dept_name from dept_p)d 
-		       on u.dept_id = d.d_id
+		left join
+		(select user_info_id m_id, name m_name from user_info_p) p
+		on u.manager_id = p.m_id) info
+		on u.user_id = info.user_info_id)u
+		left join
+		(select dept_id d_id, dept_name d_name from dept_p)d
+		on u.dept_id = d.d_id
 	</sql>
 	
 	<!--根据userId查询用户信息  -->

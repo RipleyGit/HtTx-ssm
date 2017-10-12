@@ -10,7 +10,7 @@
 	</delete>
 	
 	
-	<select id="findManagerList" resultType="UserInfo">
+	<select id="findUserInfoList" resultType="UserInfo">
 		select * from user_info_p
 	</select>
 	

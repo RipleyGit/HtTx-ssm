@@ -14,7 +14,7 @@
 <div id="innerMenubar">
   <div id="navMenubar">
 <ul>
-	<li id="save"><a href="#" onclick="formSubmit('save','_self');this.blur();">保存</a></li>
+	<li id="save"><a href="#" onclick="formSubmit('update','_self');this.blur();">保存</a></li>
 	<li id="back"><a href="#" onclick="window.history.go(-1);this.blur();">返回</a></li>
 </ul>
   </div>
@@ -52,11 +52,11 @@
 			</select>
 		</td>
 		<td>真实姓名：</td>
-		<td><input name="userInfo.name" type="text" value="${ userInfo.name }"/></td>
+		<td><input name="userInfo.name" type="text" value="${ user.userInfo.name }"/></td>
 	</tr>
 	<tr class="odd">
 		<td>身份证号：</td>
-		<td><input name="userInfo.cardNo" type="text" value="${ userInfo.cardNo }"/></td>
+		<td><input name="userInfo.cardNo" type="text" value="${ user.userInfo.cardNo }"/></td>
 		<td>直属领导：</td>
 		<td>
 			<select name="userInfo.manager.userInfoId" style="width:121px">
@@ -122,7 +122,7 @@
 	<tr class="odd">
 		<td>备注信息：</td>
 		<td colspan="3">
-			<textarea style="width:100%;height:80px" name="userInfo.remark" value="${ user.userInfo.remark }"></textarea>
+			<textarea style="width:100%;height:80px" name="userInfo.remark" >${ user.userInfo.remark }</textarea>
 		</td>
 	</tr>
 </table>

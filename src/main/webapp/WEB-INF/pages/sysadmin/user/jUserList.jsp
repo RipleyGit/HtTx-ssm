@@ -30,16 +30,20 @@
 			if(checked.length == 1){
 				formSubmit('toupdate','_self');
 			}else{
-				alert("请选中一个部门！");
+				alert("请选中一个用户！");
 				return fasle;
 			}
 		}
 		function toDelete(){
 			var checked = getChecked();
 			if(checked.length > 0){
-				formSubmit('delete','_self');
+				if(confirm("你确定删除该用户？")){
+					formSubmit('delete','_self');
+			     }else{
+			    	 return false;
+			     }
 			}else{
-				alert("请勾选删除的部门");
+				alert("请勾选删除的用户");
 				return false;
 			}
 		}
@@ -48,7 +52,7 @@
 			if(checked.length > 0){
 				formSubmit('start','_self');
 			}else{
-				alert("请选至少一个启用的部门！");
+				alert("请选至少一个启用的用户！");
 				return false;
 			}
 			
@@ -58,7 +62,7 @@
 			if(checked.length > 0){
 				formSubmit('stop','_self');
 			}else{
-				alert("请选至少一个停用的部门！");
+				alert("请选至少一个停用的用户！");
 				return false;
 			}
 			
