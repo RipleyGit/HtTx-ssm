@@ -1,0 +1,13 @@
+create table ROLE_P 
+(
+   ROLE_ID              VARCHAR2(40)         not null,
+   NAME                 VARCHAR2(30),
+   REMARKS              VARCHAR2(100),
+   ORDER_NO             INT,
+   CREATE_BY            VARCHAR2(40),
+   CREATE_DEPT          VARCHAR2(40),
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR2(40),
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_ROLE_P primary key (ROLE_ID)
+);

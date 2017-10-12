@@ -1,0 +1,14 @@
+create table USER_P 
+(
+   USER_ID              VARCHAR2(40)         not null,
+   DEPT_ID              VARCHAR2(40),
+   USERNAME             VARCHAR2(50),
+   PASSWORD             VARCHAR2(40),
+   STATE                INT,
+   CREATE_BY            VARCHAR2(40),
+   CREATE_DEPT          VARCHAR2(40),
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR2(40),
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_USER_P primary key (USER_ID)
+);

@@ -8,10 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import me.seaOf.httx.pojo.Dept;
+import me.seaOf.httx.pojo.Role;
 import me.seaOf.httx.pojo.User;
 import me.seaOf.httx.pojo.UserInfo;
 import me.seaOf.httx.service.DeptService;
+import me.seaOf.httx.service.RoleService;
 import me.seaOf.httx.service.UserService;
 
 @Controller
@@ -22,6 +27,9 @@ public class UserController extends BaseController {
 	
 	@Autowired
 	private DeptService deptService;
+	
+	@Autowired
+	private RoleService roleService;
 	
 	@RequestMapping("/list")
 	public String findAll(Model model) {
@@ -113,6 +121,39 @@ public class UserController extends BaseController {
 		
 		userService.updateUser(user);
 		
+		return "redirect:/sysadmin/user/list";
+	}
+	/**
+	 * 给用户分配角色
+	 * @throws JsonProcessingException 
+	 */
+	@RequestMapping("/toRole")
+	private String toRole(String userId,Model model) throws JsonProcessingException {
+		List<Role> roleList = roleService.findAll();
+		
+		//根据userId查询用户已经拥有的角色信息
+		List<String> userRoleList = userService.findRoleListByUserId(userId);
+		
+		for (Role role : roleList) {
+			if(userRoleList.contains(role.getRoleId())) {
+				//表示用户已经拥有该角色信息
+				role.setChecked(true);
+			}
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		String zTreeJSON = objectMapper.writeValueAsString(roleList);
+		model.addAttribute("userId", userId);
+		model.addAttribute("zTreeJSON", zTreeJSON);
+		return "/sysadmin/user/jUserRole";
+	}
+	/**
+	 * 保存用户角色信息
+	 */
+	@RequestMapping("/saveUserRole")
+	public String saveUserRole(String userId,String[] roleIds) {
+		
+		userService.saveUserRole(userId,roleIds);
 		return "redirect:/sysadmin/user/list";
 	}
 }

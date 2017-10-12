@@ -1,0 +1,13 @@
+create table DEPT_P 
+(
+   DEPT_ID              VARCHAR2(40)         not null,
+   PARENT_ID            VARCHAR2(40),
+   DEPT_NAME            VARCHAR2(50),
+   STATE                INT,
+   CREATE_BY            VARCHAR2(40),
+   CREATE_DEPT          VARCHAR2(40),
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR2(40),
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_DEPT_P primary key (DEPT_ID)
+);

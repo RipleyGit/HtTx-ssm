@@ -21,4 +21,8 @@ public interface UserService {
 	public void deleteUsers(String[] userIds);
 
 	public void updateState(String[] userIds, int state);
+
+	public void saveUserRole(String userId, String[] roleIds);
+
+	public List<String> findRoleListByUserId(String userId);
 }

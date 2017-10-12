@@ -30,6 +30,8 @@
 		<servlet-api.version>2.5</servlet-api.version>
 		
 		<jsp-api.version>2.0</jsp-api.version>
+		
+		<jackson.version>2.4.2</jackson.version>
 	</properties>
 	
 	<dependencies>
@@ -167,7 +169,14 @@
 	      <groupId>taglibs</groupId>
 	      <artifactId>standard</artifactId>
 	      <version>1.1.0</version>
-	    </dependency>					
+	    </dependency>		
+	    
+	    <!-- Jackson Json处理工具包 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+	    </dependency>			
 	</dependencies>
 	<build>
 		<plugins>

@@ -67,7 +67,16 @@
 			}
 			
 		}
-		
+		function toRole(){
+			var checked = getChecked();
+			if(checked.length == 1){
+				formSubmit('toRole','_self');
+			}else{
+				alert("请选一个的用户！");
+				return false;
+			}
+			
+		}
 	</script>
 </head>
 
@@ -85,6 +94,7 @@
 	<li id="delete"><a href="#" onclick="toDelete();this.blur();">删除</a></li>
 	<li id="new"><a href="#" onclick="toStart();this.blur();">启用</a></li>
 	<li id="new"><a href="#" onclick="toStop();this.blur();">停用</a></li>
+	<li id="new"><a href="#" onclick="toRole();this.blur();">角色</a></li>
 </ul>
   </div>
 </div>

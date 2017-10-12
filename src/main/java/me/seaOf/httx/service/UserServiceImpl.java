@@ -1,6 +1,7 @@
 package me.seaOf.httx.service;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -98,6 +99,20 @@ public class UserServiceImpl implements UserService {
 		
 		userMapper.updateState(userIds,state);
 		
+	}
+	@Override
+	public void saveUserRole(String userId, String[] roleIds) {
+		//防止重付提交 先删除原来的数据
+		userMapper.deleteUserRoles(userId);
+		
+		for (String roleId : roleIds) {
+			userMapper.saveUserRole(userId,roleId);
+		}
+	}
+	@Override
+	public List<String> findRoleListByUserId(String userId) {
+		 return userMapper.findRoleListByUserId(userId);
+	
 	}
 	
 }
