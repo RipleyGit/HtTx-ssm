@@ -57,7 +57,7 @@ public class UserController extends BaseController {
 			(@RequestParam(value="userId",required=true) String[] userIds){
 		
 		userService.deleteUsers(userIds);
-
+		
 		//页面跳转到用户列表页面 使用重定向  
 		return "redirect:/sysadmin/user/list";
 	}

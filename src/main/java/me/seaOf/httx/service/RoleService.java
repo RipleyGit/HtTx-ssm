@@ -10,6 +10,7 @@ public interface RoleService {
 	public List<Role> findAll();
 
 	public void saveRole(Role role);
-	
+
+	public void deleteRoleByRoleId(String roleId);
 	
 }

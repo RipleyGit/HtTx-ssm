@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
 		return userMapper.findAll();
 	}
 	@Override
@@ -59,12 +58,10 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public User findUserById(String userId) {
-		// TODO Auto-generated method stub
 		return userMapper.findUserById(userId);
 	}
 	@Override
 	public UserInfo findUserInfoById(String userId) {
-		// TODO Auto-generated method stub
 		return userMapper.findUserInfoById(userId);
 	}
 	@Override
@@ -91,6 +88,11 @@ public class UserServiceImpl implements UserService {
 		
 		//删除主表数据
 		userMapper.deleteUsers(userIds);
+		
+		//删除相应的用户权限
+		for (String userId : userIds) {
+			userMapper.deleteUserRoles(userId);
+		}
 	}
 
 

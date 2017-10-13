@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import me.seaOf.httx.pojo.Role;
 import me.seaOf.httx.service.RoleService;
@@ -40,5 +41,16 @@ public class RoleController extends BaseController {
 	public String saveRole(Role role) {
 		roleService.saveRole(role);
 		return "redirect:/sysadmin/role/list";
+	}
+	/**
+	 * и╬ЁЩ╫ги╚пео╒
+	 */
+	@RequestMapping("/delete")
+	public String doDelete(@RequestParam(value="userId",required=true)String[] roleIds) {
+		for (String roleId : roleIds) {
+			roleService.deleteRoleByRoleId(roleId);
+		}
+		return "redirect:/sysadmin/role/list";
+		
 	}
 }
