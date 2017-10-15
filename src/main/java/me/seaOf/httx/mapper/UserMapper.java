@@ -29,4 +29,7 @@ public interface UserMapper {
 	public void deleteUserRoles(String userId);
 	@Select("select role_id from role_user_p where user_id = #{userId}")
 	public List<String> findRoleListByUserId(String userId);
+	
+	@Select("select * from user_p where username=#{param1} and password=#{param2}")
+	public User findUserByU_P(String username, String password);
 }

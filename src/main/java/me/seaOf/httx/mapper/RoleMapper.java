@@ -19,5 +19,7 @@ public interface RoleMapper {
 	public void deleteUserRoleByRoleId(String roleId);
 	@Delete("delete from role_p where role_id=#{roleId}")
 	public void deleteRoleByRoleId(String roleId);
+
+	public void updateState(String[] roleIds, int state);
 	
 }

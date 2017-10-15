@@ -18,4 +18,13 @@
 				<if test="checked != null">#{checked},</if>
 			</trim>
 	</insert>
+	
+	<!-- 根据Id更新状态 -->
+	<update id="updateState">
+		update role_p set state = #{param2} where role_id in (
+			<foreach collection="param1" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</update>
 </mapper>

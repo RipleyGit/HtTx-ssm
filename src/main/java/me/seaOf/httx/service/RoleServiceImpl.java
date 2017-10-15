@@ -44,4 +44,9 @@ public class RoleServiceImpl implements RoleService {
 		roleMapper.deleteRoleByRoleId(roleId);
 	}
 
+	@Override
+	public void updateState(String[] roleIds, int state) {
+		roleMapper.updateState(roleIds,state);
+	}
+
 }

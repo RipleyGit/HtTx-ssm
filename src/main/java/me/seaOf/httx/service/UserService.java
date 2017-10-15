@@ -25,4 +25,6 @@ public interface UserService {
 	public void saveUserRole(String userId, String[] roleIds);
 
 	public List<String> findRoleListByUserId(String userId);
+
+	public User findUserByU_P(String username, String password);
 }

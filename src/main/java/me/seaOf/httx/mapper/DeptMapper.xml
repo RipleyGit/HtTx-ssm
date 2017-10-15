@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="me.seaOf.httx.mapper.DeptMapper">
-	<!--查询部门的全部列表信息     要求全部的sql语句统统小写-->
-	<select id="findAll" resultMap="deptRM">
-		select * from 
-		dept_p d
-		       left join
-		(select dept_id as p_id,dept_name as p_name from dept_p) p
-		       on d.parent_id = p.p_id
-		order by dept_id
-	</select>
-	
 	<!--type:封装的主对象的类型   由于定义了别名包 所以直接写类名，映射时会自动的拼接
 		 autoMapping="true" 在多表关联查询中使用，可以实现自动的映射。可以将属性和字段相同的实现
 		 映射，也可以根据驼峰映射规则中规定自动映射。
@@ -24,6 +14,30 @@
 			<result column="p_name" property="deptName"/>
 		</association>
 	</resultMap>
+	<sql id="baseSql">
+		<if test="createBy != null">create_by,</if>
+		<if test="createDept != null">create_dept,</if>
+		<if test="createTime != null">create_time,</if>
+		<if test="updateBy != null">update_by,</if>
+		<if test="updateTime != null">update_time</if>
+	</sql>
+	<sql id="basePojo">
+		<if test="createBy != null">#{createBy,jdbcType=VARCHAR},</if>
+		<if test="createDept != null">#{createDept,jdbcType=VARCHAR},</if>
+		<if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+		<if test="updateBy != null">#{updateBy,jdbcType=VARCHAR},</if>
+		<if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+	</sql>
+	<!--查询部门的全部列表信息     要求全部的sql语句统统小写-->
+	<select id="findAll" resultMap="deptRM">
+		select * from 
+		dept_p d
+		       left join
+		(select dept_id as p_id,dept_name as p_name from dept_p) p
+		       on d.parent_id = p.p_id
+		order by dept_id
+	</select>
+	
 	
 	<!--修改部门状态 
 		collection：表示当前正在遍历的集合 
@@ -69,21 +83,7 @@
       <if test="state != null">
         state,
       </if>
-      <if test="createBy != null">
-        create_by,
-      </if>
-      <if test="createDept != null">
-        create_dept,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateBy != null">
-        update_by,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
+      <include refid="baseSql"/>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="deptId != null">
@@ -98,21 +98,7 @@
       <if test="state != null">
         #{state,jdbcType=DECIMAL},
       </if>
-      <if test="createBy != null">
-        #{createBy,jdbcType=VARCHAR},
-      </if>
-      <if test="createDept != null">
-        #{createDept,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null">
-        #{updateBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+      <include refid="basePojo"/>
     </trim>
 	</insert>
 	

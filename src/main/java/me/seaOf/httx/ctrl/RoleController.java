@@ -46,11 +46,39 @@ public class RoleController extends BaseController {
 	 * 删除角色信息
 	 */
 	@RequestMapping("/delete")
-	public String doDelete(@RequestParam(value="userId",required=true)String[] roleIds) {
+	public String doDelete(@RequestParam(value="roleId",required=true) String[] roleIds) {
 		for (String roleId : roleIds) {
 			roleService.deleteRoleByRoleId(roleId);
 		}
 		return "redirect:/sysadmin/role/list";
 		
+	}
+	//状态的启用
+		@RequestMapping("/start")
+		public String toStart(@RequestParam(value="roleId",required=true)String[] roleIds){
+			
+			int state = 1;
+			roleService.updateState(roleIds,state);
+			
+			return "redirect:/sysadmin/user/list";
+		}
+		
+		//状态的停用
+		@RequestMapping("/stop")
+		public String toStop(@RequestParam(value="roleId",required=true)String[] roleIds){
+			int state = 0;
+			roleService.updateState(roleIds,state);
+			
+			return "redirect:/sysadmin/user/list";
+		}
+	/**
+	 * 分配模块信息
+	 */
+	@RequestMapping("/toModule")
+	public String toModule() {
+		//准备全部的模块列表信息
+		
+		//
+		return "sysadmin/role/jRoleModule";
 	}
 }

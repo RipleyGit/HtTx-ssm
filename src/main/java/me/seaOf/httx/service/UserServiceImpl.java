@@ -116,5 +116,10 @@ public class UserServiceImpl implements UserService {
 		 return userMapper.findRoleListByUserId(userId);
 	
 	}
+	@Override
+	public User findUserByU_P(String username, String password) {
+		
+		return userMapper.findUserByU_P(username,password);
+	}
 	
 }

@@ -12,5 +12,7 @@ public interface RoleService {
 	public void saveRole(Role role);
 
 	public void deleteRoleByRoleId(String roleId);
+
+	public void updateState(String[] roleIds, int state);
 	
 }

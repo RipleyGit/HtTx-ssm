@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.seaOf.httx.mapper.ModuleMapper">
+	<resultMap type="Module" id="moduleRM" autoMapping="true">
+		<id column="module_id" property="moduleId"/>
+		<association property="parentModule" javaType="Module">
+			<id column="p_id" property="moduleId"/>
+			<result column="p_name" property="name"/>
+		</association>
+	</resultMap>
+	
+	<select id="findAll" resultMap="moduleRM">
+		select * from 
+		module_p m
+		         left join
+		(select module_id p_id,name p_name from module_p)p
+		         on m.parent_id = p.p_id
+		 order by order_no
+	</select>
+	<!-- 根据Id查询模板对象 -->
+	<select id="findModuleById" resultMap="moduleRM">
+		select * from 
+		module_p m
+		         left join
+		(select module_id p_id,name p_name from module_p)p
+		         on m.parent_id = p.p_id
+		         where m.module_id=#{moduleId}
+	</select>
+	<!--模块的新增  -->
+	<insert id="saveModule">
+		insert into module_p values(
+			#{moduleId},
+			#{parentModule.moduleId},
+			#{name},
+			#{ctype},
+			#{state},
+			#{orderNo},
+			#{remark},
+			#{createBy,jdbcType=VARCHAR},
+			#{createDept,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{updateBy,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=DATE}
+		)
+	</insert>
+	<!-- 根据Id更新状态 -->
+	<update id="updateState">
+		update module_p set state = #{param2} where module_id in (
+			<foreach collection="param1" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</update>
+	<delete id="deleteModules">
+		delete from module_p where module_id in(
+			<foreach collection="array" item="id" separator=",">
+				#{id}
+			</foreach>
+		)
+	</delete>
+</mapper>
